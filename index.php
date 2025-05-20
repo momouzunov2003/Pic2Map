@@ -18,11 +18,13 @@
 
     <div class="overlay d-flex flex-column">
             <header class="bg-light p-3 d-flex justify-content-between align-items-center shadow-sm">
-                <div class="fw-bold fs-4">Logo</div>
-                    <nav>
-                        <a href="#" class="btn btn-outline-primary me-2">Home</a>
-                        <a href="#" class="btn btn-outline-secondary">Contact</a>
-                    </nav>
+                <div class="logo-container d-flex align-items-center">
+                    <img src="./img/logo.png" alt="Logo" class="logo" width="70" height="70">
+                </div>
+                <nav>
+                    <a href="#" class="btn btn-outline-primary me-2">Home</a>
+                    <a href="#" class="btn btn-outline-secondary">Contact</a>
+                </nav>
             </header>
 
         <main class="main-content">
