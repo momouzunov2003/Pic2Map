@@ -15,14 +15,15 @@
 		<link rel="manifest" href="<?= APP_ROOT ?>/img/favicon/site.webmanifest">
     </head>
 <body>
-    <div id="map"></div>
+    <main class="position-relative">
+        <div id="map"></div>
 
-    <div class="overlay d-flex flex-column">
+        <div class="overlay d-flex flex-column">
             <header class="bg-light p-3 d-flex justify-content-between align-items-center shadow-sm">
                 <div class="logo-container d-flex align-items-center">
                     <a href="<?= APP_ROOT ?>/">
-						<img src="<?= APP_ROOT ?>/img/logo.png" alt="Logo" class="logo" width="70" height="70">
-					</a>
+                        <img src="<?= APP_ROOT ?>/img/logo.png" alt="Logo" class="logo" width="70" height="70">
+                        </a>
                 </div>
                 <nav>
                     <a href="<?= APP_ROOT ?>/random" class="btn btn-outline-danger me-2">Random</a>
@@ -31,24 +32,42 @@
                 </nav>
             </header>
 
-        <main class="main-content">
-			<div class="container bg-white m-5">
-				<h1 class="text-center mt-5">Contact Us</h1>
-				<p class="text-center">We would love to hear from you! Please reach out with any questions or feedback.</p>
-				<div class="h-50 d-flex flex-column justify-content-center align-items-center">
-					<h2 class="text-center">Get in Touch</h2>
-					<p class="text-center">You can contact us via email at <a href="mailto:example"></a>
-					</p>
-					<p class="text-center">Or follow us on our social media channels:</p>
-				</div>
-			</div>
-        </main>
+            <main class="main-content">
+                <div class="container bg-white m-5">
+                    <h1 class="text-center mt-5">Contact Us</h1>
+                    <p class="text-center">We would love to hear from you! Please reach out with any questions or feedback.</p>
 
-        <footer class="bg-light text-center py-3 shadow-sm">
-            &copy; <script>document.write(new Date().getFullYear())</script> Pic2Map Fake.
-			<a href="<?= APP_ROOT ?>/tc">Terms and Conditions</a>
-        </footer>
-    </div>
+                    <form action="/submit-contact" method="POST" class="p-4 w-100" style="max-width: 600px; margin: 0 auto;">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+
+                    <div class="h-50 d-flex flex-column justify-content-center align-items-center">
+                    <h2 class="text-center">Get in Touch</h2>
+                    <p class="text-center">You can contact us via email at <a href="mailto:example">example@example.com</a></p>
+                    <p class="text-center">Or follow us on our social media channels:</p>
+                    </div>
+                </div>
+            </main>
+    
+
+            <footer class="bg-light text-center py-3 shadow-sm">
+                &copy; <script>document.write(new Date().getFullYear())</script> Pic2Map Fake.
+                <a href="<?= APP_ROOT ?>/tc">Terms and Conditions</a>
+            </footer>
+        </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
