@@ -27,3 +27,7 @@
 header, footer {
     z-index: 2;
 }
+
+.container {
+    min-height: 90%;
+}
