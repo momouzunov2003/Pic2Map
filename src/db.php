@@ -26,16 +26,14 @@ function initializeDatabase(PDO $pdo): void {
     $exists = $stmt->fetch();
 
     if (!$exists) {
-        // Create 'galleries' table
         $pdo->exec("
             CREATE TABLE galleries (
-            id TEXT PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             slug TEXT NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
 	");
 
-        // Create 'images' table
         $pdo->exec("
             CREATE TABLE images (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
