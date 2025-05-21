@@ -32,11 +32,22 @@
             </header>
 
         <main class="main-content">
-            <button class="btn btn-primary btn-lg shadow">Create a gallery</button>
+			<div class="container h-100">
+				<h1 class="text-center mt-5">Welcome to Pic2Map</h1>
+				<p class="text-center">Discover the world through pictures.</p>
+				<div class="h-50 d-flex flex-column justify-content-center align-items-center">
+					<h2 class="text-center">How it works</h2>
+					<p class="text-center">Upload a picture and we will show you where it was taken on the map.</p>
+					<div class="text-center">
+						<a href="" class="btn btn-primary">Upload a Picture</a>
+					</div>
+				</div>
+			</div>
         </main>
 
         <footer class="bg-light text-center py-3 shadow-sm">
-            &copy; <script>document.write(new Date().getFullYear())</script> Pic2Map Fake. <a href="<?= APP_ROOT ?>/tc">Terms and Conditions</a>
+            &copy; <script>document.write(new Date().getFullYear())</script> Pic2Map Fake.
+			<a href="<?= APP_ROOT ?>/tc">Terms and Conditions</a>
         </footer>
     </div>
 
@@ -59,6 +70,7 @@
                 },
                 (err) => {
                     console.warn("Geolocation failed or was denied.");
+					console.debug(err)
                     map.setView(["42.674349403151", "23.330461580825677"], 16);
                 }
             );
