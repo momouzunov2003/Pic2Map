@@ -47,6 +47,16 @@ if (!is_array($uploadedFiles['name'])) {
     exit;
 }
 
+function getGps($exifCoord, $hemisphere) {
+    $degrees = count($exifCoord) > 0 ? eval('return ' . $exifCoord[0] . ';') : 0;
+    $minutes = count($exifCoord) > 1 ? eval('return ' . $exifCoord[1] . ';') : 0;
+    $seconds = count($exifCoord) > 2 ? eval('return ' . $exifCoord[2] . ';') : 0;
+
+    $flip = ($hemisphere == 'W' || $hemisphere == 'S') ? -1 : 1;
+
+    return $flip * ($degrees + $minutes / 60 + $seconds / 3600);
+}
+
 $results = [];
 for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
     $tmpName = $uploadedFiles['tmp_name'][$i];
@@ -64,16 +74,37 @@ for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
 
     if (getimagesize($tmpName)) {
         if (move_uploaded_file($tmpName, $targetPath)) {
-            dbQuery("INSERT INTO images (gallery_id, filename) VALUES (:gallery_id, :filename)", [
-                ':gallery_id' => $galleryId,
-                ':filename' => $targetPath
-            ]);
-            $results[] = ['file' => $originalName, 'status' => 'Uploaded'];
-        } else {
+            $exif = @exif_read_data($targetPath);
+            $latitude = $longitude = $datetime = $make = $model = null;
+
+            if ($exif) {
+                if (isset($exif['GPSLatitude'], $exif['GPSLatitudeRef'], $exif['GPSLongitude'], $exif['GPSLongitudeRef'])) {
+                    $latitude = getGps($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
+                    $longitude = getGps($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
+                }
+
+                $datetime = $exif['DateTimeOriginal'] ?? null;
+                $make = $exif['Make'] ?? null;
+                $model = $exif['Model'] ?? null;
+
+                dbQuery("INSERT INTO images (gallery_id, filename, latitude, longitude, device_maker, device_model, taken_at) VALUES (:gallery_id, :filename, :latitude, :longitude, :device_maker, :device_model, :taken_at)", [
+                    ':gallery_id' => $galleryId,
+                    ':filename' => $targetPath,
+                    ':latitude' => $latitude,
+                    ':longitude' => $longitude,
+                    ':device_maker' => $make,
+                    ':device_model' => $model,
+                    ':taken_at' => $datetime
+                ]);
+                $results[] = ['file' => $originalName, 'status' => 'Uploaded'];
+        } 
+        else {
             $results[] = ['file' => $originalName, 'status' => 'Failed'];
         }
-    } else {
-        $results[] = ['file' => $originalName, 'status' => 'Invalid image file'];
+    } 
+        else {
+            $results[] = ['file' => $originalName, 'status' => 'Invalid image file'];
+        }
     }
 }
 

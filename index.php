@@ -13,6 +13,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="<?= APP_ROOT ?>/img/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="<?= APP_ROOT ?>/img/favicon/favicon-16x16.png">
         <link rel="manifest" href="<?= APP_ROOT ?>/img/favicon/site.webmanifest">
+       
     </head>
 <body>
     <div id="map"></div>
@@ -37,9 +38,14 @@
 				<p class="text-center">Discover the world through pictures.</p>
 				<div class="h-50 d-flex flex-column justify-content-center align-items-center">
 					<h2 class="text-center">How it works</h2>
-					<p class="text-center">Upload a picture and we will show you where it was taken on the map.</p>
+					<p class="text-center">Upload pictures and we will show you where they were taken on the map.</p>
 					<div class="text-center">
-						<a href="" class="btn btn-primary">Upload a Picture</a>
+                        <label class="btn btn-primary mb-0">
+                        Create Gallery
+                        <input type="file" id="photoInput" accept="image/jpeg, image/png, image/webp, image/tiff" multiple hidden>
+                        </label>
+                    </div>
+                        <small class="d-block mt-2 text-muted">Only JPG, PNG, WEBP and TIFF files under 5MB are supported.</small>
 					</div>
 				</div>
 			</div>
@@ -54,6 +60,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="<?= APP_ROOT ?>/js/scripts.js"></script>
     <script>
         const map = L.map('map').setView([0, 0], 2);
 

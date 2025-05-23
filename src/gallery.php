@@ -9,7 +9,6 @@ function createGallery(): string {
 
     $dir = __DIR__ . '/../public/uploads/' . $slug;
     if (!is_dir($dir)) mkdir($dir, 0755, true);
-
     return $slug;
 }
 
@@ -32,5 +31,5 @@ function getGallery(string $slug): ?array {
 
     return null;
 }
-
+ 
 ?>
