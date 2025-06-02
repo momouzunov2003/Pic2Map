@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pic2Map</title>
         <link rel="stylesheet" href="<?= APP_ROOT ?>/css/main.css">
+        <link rel="stylesheet" href="<?= APP_ROOT ?>/css/index.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
@@ -19,18 +20,18 @@
     <div id="map"></div>
 
     <div class="overlay d-flex flex-column">
-            <header class="bg-light p-3 d-flex justify-content-between align-items-center shadow-sm">
-                <div class="logo-container d-flex align-items-center">
-                    <a href="<?= APP_ROOT ?>/">
-						<img src="<?= APP_ROOT ?>/img/logo.png" alt="Logo" class="logo" width="70" height="70">
-					</a>
-                </div>
-                <nav>
-                    <a href="<?= APP_ROOT ?>/random" class="btn btn-outline-danger me-2">Random</a>
-                    <a href="<?= APP_ROOT ?>/" class="btn btn-primary disabled me-2">Home</a>
-                    <a href="<?= APP_ROOT ?>/contacts" class="btn btn-outline-secondary">Contact</a>
-                </nav>
-            </header>
+        <header class="bg-light p-3 d-flex justify-content-between align-items-center shadow-sm">
+            <div class="logo-container d-flex align-items-center">
+                <a href="<?= APP_ROOT ?>/">
+                    <img src="<?= APP_ROOT ?>/img/logo.png" alt="Logo" class="logo" width="70" height="70">
+                </a>
+            </div>
+            <nav>
+                <a href="<?= APP_ROOT ?>/random" class="btn btn-outline-danger me-2">Random</a>
+                <a href="<?= APP_ROOT ?>/" class="btn btn-primary disabled me-2">Home</a>
+                <a href="<?= APP_ROOT ?>/contacts" class="btn btn-outline-secondary">Contact</a>
+            </nav>
+        </header>
 
         <main class="main-content">
 			<div class="container h-100">
@@ -40,12 +41,9 @@
 					<h2 class="text-center">How it works</h2>
 					<p class="text-center">Upload pictures and we will show you where they were taken on the map.</p>
 					<div class="text-center">
-                        <label class="btn btn-primary mb-0">
-                        Create Gallery
-                        <input type="file" id="photoInput" accept="image/jpeg, image/png, image/webp, image/tiff" multiple hidden>
-                        </label>
-                    </div>
-                        <small class="d-block mt-2 text-muted">Only JPG, PNG, WEBP and TIFF files under 5MB are supported.</small>
+                        <button class="btn btn-primary mb-0" onclick="window.location.href='<?= APP_ROOT ?>/create-gallery'">
+                            Create Gallery
+                        </button>
 					</div>
 				</div>
 			</div>

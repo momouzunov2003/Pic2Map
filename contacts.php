@@ -52,12 +52,6 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Send Message</button>
                     </form>
-
-                    <div class="h-50 d-flex flex-column justify-content-center align-items-center">
-                    <h2 class="text-center">Get in Touch</h2>
-                    <p class="text-center">You can contact us via email at <a href="mailto:example">example@example.com</a></p>
-                    <p class="text-center">Or follow us on our social media channels:</p>
-                    </div>
                 </div>
             </main>
     
