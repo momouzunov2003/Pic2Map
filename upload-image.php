@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/src/db.php';
 
+define ('MAX_FILE_SIZE', 15 * 1024 * 1024); // 15MB
+
 $allowed_types = ['image/jpeg', 'image/png', 'image/tiff', 'image/webp'];
 
 header('Content-Type: application/json');
@@ -70,6 +72,11 @@ for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
         continue;
     }
 
+    if ($uploadedFiles['size'][$i] > MAX_FILE_SIZE) {
+        $results[] = ['file' => $originalName, 'status' => 'File too large. Max allowed is ' . (MAX_FILE_SIZE / 1024 / 1024) . 'MB'];
+        continue;
+    }
+
     $targetPath = $uploadDir . '/' . uniqid() . '-' . $originalName;
 
     if (getimagesize($tmpName)) {
@@ -82,29 +89,29 @@ for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
                     $latitude = getGps($exif['GPSLatitude'], $exif['GPSLatitudeRef']);
                     $longitude = getGps($exif['GPSLongitude'], $exif['GPSLongitudeRef']);
                 }
+            }
 
-                $datetime = $exif['DateTimeOriginal'] ?? null;
-                $make = $exif['Make'] ?? null;
-                $model = $exif['Model'] ?? null;
+            $datetime = $exif['DateTimeOriginal'] ?? null;
+            $make = $exif['Make'] ?? null;
+            $model = $exif['Model'] ?? null;
 
-                dbQuery("INSERT INTO images (gallery_id, filename, latitude, longitude, device_maker, device_model, taken_at) VALUES (:gallery_id, :filename, :latitude, :longitude, :device_maker, :device_model, :taken_at)", [
-                    ':gallery_id' => $galleryId,
-                    ':filename' => $targetPath,
-                    ':latitude' => $latitude,
-                    ':longitude' => $longitude,
-                    ':device_maker' => $make,
-                    ':device_model' => $model,
-                    ':taken_at' => $datetime
-                ]);
-                $results[] = ['file' => $originalName, 'status' => 'Uploaded'];
-        } 
+            dbQuery("INSERT INTO images (gallery_id, filename, latitude, longitude, device_maker, device_model, taken_at) VALUES (:gallery_id, :filename, :latitude, :longitude, :device_maker, :device_model, :taken_at)", [
+                ':gallery_id' => $galleryId,
+                ':filename' => $targetPath,
+                ':latitude' => $latitude,
+                ':longitude' => $longitude,
+                ':device_maker' => $make,
+                ':device_model' => $model,
+                ':taken_at' => $datetime
+            ]);
+            $results[] = ['file' => $originalName, 'status' => 'Uploaded'];
+        }
         else {
             $results[] = ['file' => $originalName, 'status' => 'Failed'];
         }
-    } 
-        else {
-            $results[] = ['file' => $originalName, 'status' => 'Invalid image file'];
-        }
+    }
+    else {
+        $results[] = ['file' => $originalName, 'status' => 'Invalid image file'];
     }
 }
 
