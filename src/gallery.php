@@ -27,7 +27,7 @@ function getGallery(string $slug): ?array {
         return $images;
     }
 
-    return null;
+    return [];
 }
  
 ?>
