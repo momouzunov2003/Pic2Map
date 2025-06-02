@@ -17,7 +17,7 @@
        
     </head>
 <body>
-    <div id="map"></div>
+    <div id="background-map"></div>
 
     <div class="overlay d-flex flex-column">
         <header class="bg-light p-3 d-flex justify-content-between align-items-center shadow-sm">
@@ -69,23 +69,23 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         const APP_ROOT = "<?= APP_ROOT ?>";
-        const map = L.map('map').setView([0, 0], 2);
+        const backgroundMap = L.map('background-map').setView([0, 0], 2);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+        }).addTo(backgroundMap);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-                    map.setView([lat, lng], 16);
+                    backgroundMap.setView([lat, lng], 16);
                 },
                 (err) => {
                     console.warn("Geolocation failed or was denied.");
 					console.debug(err)
-                    map.setView(["42.674349403151", "23.330461580825677"], 16);
+                    backgroundMap.setView(["42.674349403151", "23.330461580825677"], 16);
                 }
             );
         } else {

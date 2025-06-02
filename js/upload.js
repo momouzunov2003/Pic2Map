@@ -37,6 +37,8 @@ function uploadPhoto() {
             });
 
             showToast(`${successCount} image(s) uploaded successfully!`, 'success');
+            console.log('Uploads finished, refreshing gallery...');
+            updateGallery();
         })
         .catch(error => {
             console.error('Error during upload:', error);

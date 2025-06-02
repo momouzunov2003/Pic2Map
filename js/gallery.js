@@ -1,3 +1,6 @@
+let map;
+let markersLayer;
+
 async function fetchImages() {
     const gallerySlug = window.location.pathname.split('/').pop();
 
@@ -30,66 +33,77 @@ async function fetchImages() {
 }
 
 async function initMap(images) {
-    const map = L.map('map2').setView([42.674349403151, 23.330461580825677], 16);
+    const validImages = images.filter(img => typeof img.latitude === 'number' && typeof img.longitude === 'number');
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    if (!map) {
+        // Initialize map once
+        map = L.map('map2').setView([42.6743, 23.3304], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+    }
 
-    console.log("Fetched images:", images);
+    // If markers layer exists, remove it
+    if (markersLayer) {
+        markersLayer.clearLayers();
+    }
 
-    if (images.length === 0) {
-        console.warn("No images found for this gallery.");
+    // Create a new layer group for current markers
+    markersLayer = L.layerGroup().addTo(map);
+
+    if (validImages.length === 0) {
+        console.warn("No geotagged images found.");
         return;
     }
 
-    const bounds = images.filter(img => typeof img.latitude === 'number' && typeof img.longitude === 'number')
-                         .map(img => [img.latitude, img.longitude]);
-    map.fitBounds(L.latLngBounds(bounds), {
+    // Fit map to markers
+    map.fitBounds(L.latLngBounds(validImages.map(img => [img.latitude, img.longitude])), {
         padding: [20, 20],
     });
 
-    images.forEach(image => {
-        if (image.latitude && image.longitude) {
-            const thumbnailIcon = L.divIcon({
-                html: `<div class="thumbnail-marker" style="background-image: url('${image.thumbnail_url}')"></div>`,
-                iconSize: [60, 60],
-                className: ''
-            });
-            const marker = L.marker([image.latitude, image.longitude], { icon: thumbnailIcon }).addTo(map);
-            marker.bindPopup(`
-                <strong><a href=${image.url}>Link</a></strong><br>
-                <small>Device Brand: ${image.device_maker}</small><br>
-                <small>Device Model: ${image.device_model}</small><br>
-                <small>Taken at: ${image.taken_at || 'Unknown'}</small><br>
-                <small>Uploaded at: ${image.uploaded_at}</small><br>
-                <small>Coordinates: ${image.latitude}, ${image.longitude}</small><br>
-            `);
-            marker.on('click', () => {
-                const target = document.getElementById(`image-${image.id}`);
-                if (target){
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
-                    target.parentElement.classList.add('highlight');
-                    setTimeout(() => {
-                        target.classList.remove('highlight');
-                    }, 2000);
-                }
-            });
-        } else {
-            console.warn("Skipping image without valid coordinates:", image);
-        }
+    // Add markers
+    validImages.forEach(image => {
+        const thumbnailIcon = L.divIcon({
+            html: `<div class="thumbnail-marker" style="background-image: url('${image.thumbnail_url}')"></div>`,
+            iconSize: [60, 60],
+            className: ''
+        });
+
+        const marker = L.marker([image.latitude, image.longitude], { icon: thumbnailIcon }).addTo(markersLayer);
+
+        marker.bindPopup(`
+            <strong><a href=${image.url}>Link</a></strong><br>
+            <small>Device Brand: ${image.device_maker}</small><br>
+            <small>Device Model: ${image.device_model}</small><br>
+            <small>Taken at: ${image.taken_at || 'Unknown'}</small><br>
+            <small>Uploaded at: ${image.uploaded_at}</small><br>
+            <small>Coordinates: ${image.latitude}, ${image.longitude}</small><br>
+        `);
+
+        marker.on('click', () => {
+            const target = document.getElementById(`image-${image.id}`);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                const listItem = target.closest('.list-group-item');
+                listItem?.classList.add('highlight');
+                setTimeout(() => listItem?.classList.remove('highlight'), 2000);
+            }
+        });
     });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+
+async function updateGallery() {
     const images = await fetchImages();
 
     initMap(images);
     const galleryList= document.getElementById('gallery-list');
     if (galleryList) {
+        galleryList.innerHTML = '';
+
         images.forEach(image => {
             const listItem = document.createElement('li');
             listItem.className = 'list-group-item d-flex align-items-start';
@@ -145,5 +159,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         console.error('Gallery grid element not found.');
     }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    updateGallery();
 });
 
