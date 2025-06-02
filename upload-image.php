@@ -38,7 +38,7 @@ if (!$gallery) {
 $galleryId = $gallery['id'];
 
 $uploadDir = __DIR__ . '/public/uploads/' . $slug;
-$webDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/public/uploads/';
+$webDir = rtrim(dirname(preg_replace('#/+#', '/', $_SERVER['SCRIPT_NAME'])), '/') . '/public/uploads/';
 
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0755, true);
