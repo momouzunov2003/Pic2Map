@@ -79,6 +79,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             img.src = image.thumbnail_url;
             img.alt = 'Thumbnail';
             img.className = 'thumbnail me-3';
+            img.onclick = () => {
+                const link = document.createElement('a');
+                link.href = image.url;
+                link.download = `image-${image.id}.jpg`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            img.style.cursor = 'pointer';
 
             const contentDiv = document.createElement('div');
 
