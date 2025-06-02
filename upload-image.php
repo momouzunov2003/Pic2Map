@@ -60,6 +60,34 @@ function getGps($exifCoord, $hemisphere) {
     return $flip * ($degrees + $minutes / 60 + $seconds / 3600);
 }
 
+function createWebPThumbnail(string $sourcePath, string $destinationPath, int $thumbWidth = 200): bool
+{
+    try {
+        if (!extension_loaded('imagick')) {
+            throw new Exception('Imagick extension is not available.');
+        }
+
+        $image = new Imagick();
+        $image->readImage($sourcePath . '[0]');
+        $image->setImageFormat('webp');
+        $image->thumbnailImage($thumbWidth, 0);
+
+        if (!$image->writeImage($destinationPath)) {
+            throw new Exception('Failed to write WebP thumbnail.');
+        }
+
+        $image->clear();
+        $image->destroy();
+
+        return true;
+
+    } catch (Exception $e) {
+        error_log('Thumbnail creation failed: ' . $e->getMessage());
+        return false;
+    }
+}
+
+
 $results = [];
 for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
     $tmpName = $uploadedFiles['tmp_name'][$i];
@@ -82,6 +110,14 @@ for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
     $targetPath = $uploadDir . '/' . $newFileName;
     $targetWebPath = $webDir . $slug . '/' . $newFileName;
 
+    $newThumbnailFileNameWebp = 'thumb-' . $newFileName . '.webp';
+    $thumbnailPath = $uploadDir . '/' . $newThumbnailFileNameWebp;
+    $thumbnailWebPath = $webDir . $slug . '/' . $newThumbnailFileNameWebp;
+    if (!createWebPThumbnail($tmpName, $thumbnailPath)) {
+        $results[] = ['file' => $originalName, 'status' => 'Failed to create thumbnail'];
+        continue;
+    }
+
     if (getimagesize($tmpName)) {
         if (move_uploaded_file($tmpName, $targetPath)) {
             $exif = @exif_read_data($targetPath);
@@ -98,9 +134,10 @@ for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
             $make = $exif['Make'] ?? null;
             $model = $exif['Model'] ?? null;
 
-            dbQuery("INSERT INTO images (gallery_id, filename, latitude, longitude, device_maker, device_model, taken_at) VALUES (:gallery_id, :filename, :latitude, :longitude, :device_maker, :device_model, :taken_at)", [
+            dbQuery("INSERT INTO images (gallery_id, url, thumbnail_url, latitude, longitude, device_maker, device_model, taken_at) VALUES (:gallery_id, :url, :thumbnail_url, :latitude, :longitude, :device_maker, :device_model, :taken_at)", [
                 ':gallery_id' => $galleryId,
-                ':filename' => $targetWebPath,
+                ':url' => $targetWebPath,
+                ':thumbnail_url' => $thumbnailWebPath,
                 ':latitude' => $latitude,
                 ':longitude' => $longitude,
                 ':device_maker' => $make,

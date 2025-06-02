@@ -32,13 +32,14 @@ function initializeDatabase(PDO $pdo): void {
             slug TEXT NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
-	");
+	    ");
 
         $pdo->exec("
             CREATE TABLE images (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             gallery_id TEXT NOT NULL,
-            filename TEXT NOT NULL,
+            url TEXT NOT NULL,
+            thumbnail_url TEXT NOT NULL,
             latitude REAL,
             longitude REAL,
             device_maker TEXT,
@@ -47,12 +48,11 @@ function initializeDatabase(PDO $pdo): void {
             uploaded_at TEXT DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (gallery_id) REFERENCES galleries(id)
             )
-	");
+	    ");
     }
 }
 
-function dbQuery(string $sql, array $params = []): PDOStatement
-{
+function dbQuery(string $sql, array $params = []): PDOStatement {
     $stmt = getDbConnection()->prepare($sql);
     $stmt->execute($params);
     return $stmt;
