@@ -38,6 +38,7 @@ if (!$gallery) {
 $galleryId = $gallery['id'];
 
 $uploadDir = __DIR__ . '/public/uploads/' . $slug;
+$webDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/public/uploads/';
 
 if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0755, true);
@@ -77,7 +78,9 @@ for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
         continue;
     }
 
-    $targetPath = $uploadDir . '/' . uniqid() . '-' . $originalName;
+    $newFileName = uniqid() . '-' . $originalName;
+    $targetPath = $uploadDir . '/' . $newFileName;
+    $targetWebPath = $webDir . $slug . '/' . $newFileName;
 
     if (getimagesize($tmpName)) {
         if (move_uploaded_file($tmpName, $targetPath)) {
@@ -97,7 +100,7 @@ for ($i = 0; $i < count($uploadedFiles['name']); $i++) {
 
             dbQuery("INSERT INTO images (gallery_id, filename, latitude, longitude, device_maker, device_model, taken_at) VALUES (:gallery_id, :filename, :latitude, :longitude, :device_maker, :device_model, :taken_at)", [
                 ':gallery_id' => $galleryId,
-                ':filename' => $targetPath,
+                ':filename' => $targetWebPath,
                 ':latitude' => $latitude,
                 ':longitude' => $longitude,
                 ':device_maker' => $make,
