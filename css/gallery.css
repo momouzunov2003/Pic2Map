@@ -1,0 +1,23 @@
+.thumbnail-marker {
+    width: 60px;
+    height: 60px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.4);
+    border: 2px solid white;
+}
+
+.thumbnail {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+}
+
+.gallery-list {
+    overflow-y: auto;
+}
+
+.gallery-container {
+    height: 50vh;
+}
