@@ -22,18 +22,21 @@ function uploadPhoto() {
                 throw new Error('Upload failed: ' + (data.message || 'Unknown error'));
             }
             const statusMessages = data.results.map(result => ({
-                title: result.title || null,
+                filename: result.file || null,
                 status: result.status || 'Unknown',
             }));
-
+            let successCount = 0;
             statusMessages.forEach(message => {
+                if (message.status === 'Uploaded') {
+                    successCount++;
+                }
                 if (message.status !== 'Uploaded') {
-                    console.error(`Error uploading ${message.title}: ${message.status}`);
-                    showToast(`Failed to upload ${message.title}: ${message.status}`, 'error');
+                    console.error(`Error uploading ${message.filename}: ${message.status}`);
+                    showToast(`Failed to upload ${message.filename}: ${message.status}`, 'warning');
                 }
             });
 
-            showToast('All images uploaded successfully!', 'success');
+            showToast(`${successCount} image(s) uploaded successfully!`, 'success');
         })
         .catch(error => {
             console.error('Error during upload:', error);
