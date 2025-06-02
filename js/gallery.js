@@ -43,6 +43,12 @@ async function initMap(images) {
         return;
     }
 
+    const bounds = images.filter(img => typeof img.latitude === 'number' && typeof img.longitude === 'number')
+                         .map(img => [img.latitude, img.longitude]);
+    map.fitBounds(L.latLngBounds(bounds), {
+        padding: [20, 20],
+    });
+
     images.forEach(image => {
         if (image.latitude && image.longitude) {
             const thumbnailIcon = L.divIcon({
@@ -59,6 +65,19 @@ async function initMap(images) {
                 <small>Uploaded at: ${image.uploaded_at}</small><br>
                 <small>Coordinates: ${image.latitude}, ${image.longitude}</small><br>
             `);
+            marker.on('click', () => {
+                const target = document.getElementById(`image-${image.id}`);
+                if (target){
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    target.parentElement.classList.add('highlight');
+                    setTimeout(() => {
+                        target.classList.remove('highlight');
+                    }, 2000);
+                }
+            });
         } else {
             console.warn("Skipping image without valid coordinates:", image);
         }
@@ -76,6 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             listItem.className = 'list-group-item d-flex align-items-start';
 
             const img = document.createElement('img');
+            img.id = `image-${image.id}`;
             img.src = image.thumbnail_url;
             img.alt = 'Thumbnail';
             img.className = 'thumbnail me-3';
