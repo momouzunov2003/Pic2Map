@@ -13,20 +13,18 @@ function createGallery(): string {
 }
 
 function getGallery(string $slug): ?array {
-
     $stmt = dbQuery("SELECT id FROM galleries WHERE slug = :slug", [
         ':slug' => $slug
     ]);
 
-    if ($stmt->rowCount() > 0) {
-        $gallery = $stmt->fetch(PDO::FETCH_ASSOC);
-        $galleryId = $gallery['id'];
+    $gallery = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    if ($gallery) {
         $stmt = dbQuery("SELECT * FROM images WHERE gallery_id = :gallery_id", [
-            ':gallery_id' => $galleryId
+            ':gallery_id' => $gallery['id']
         ]);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $images;
     }
 
     return null;
