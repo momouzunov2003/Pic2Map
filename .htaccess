@@ -1,6 +1,19 @@
 RewriteEngine On
 
-# Remove .php extension from URL
+# Skip if the request already ends in .php
+RewriteCond %{REQUEST_URI} !\.php$
+
+# Only rewrite if it's not a directory and .php file exists, prevents endless looping
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php [L]
+
+# Rewrite /gallery/slug to gallery.php?slug=slug
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^gallery/([^/]+)/?$ gallery.php?slug=$1 [L,QSA]
+
+ErrorDocument 404 /404.php
+
+php_value upload_max_filesize 15M
+php_value post_max_size 200M
