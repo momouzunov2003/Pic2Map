@@ -28,7 +28,7 @@
             </div>
             <nav>
                 <a href="<?= APP_ROOT ?>/random" class="btn btn-outline-danger me-2">Random</a>
-                <a href="<?= APP_ROOT ?>/" class="btn btn-primary disabled me-2">Home</a>
+                <a href="<?= APP_ROOT ?>/" class="btn btn-outline-primary me-2">Home</a>
                 <a href="<?= APP_ROOT ?>/contacts" class="btn btn-outline-secondary">Contact</a>
             </nav>
         </header>
