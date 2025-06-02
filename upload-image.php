@@ -28,12 +28,12 @@ $stmt = dbQuery("SELECT id FROM galleries WHERE slug = :slug", [
     ':slug' => $slug
 ]);
 $gallery = $stmt->fetch(PDO::FETCH_ASSOC);
-$galleryId = $gallery['id'];
-if (!$galleryId) {
+if (!$gallery) {
     http_response_code(400);
     echo json_encode(['status' => 'error', 'message' => 'gallery not found']);
     exit;
 }
+$galleryId = $gallery['id'];
 
 $uploadDir = __DIR__ . '/public/uploads/' . $slug;
 
