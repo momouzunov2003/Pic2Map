@@ -36,19 +36,16 @@ async function initMap(images) {
     const validImages = images.filter(img => typeof img.latitude === 'number' && typeof img.longitude === 'number');
 
     if (!map) {
-        // Initialize map once
         map = L.map('map2').setView([42.6743, 23.3304], 16);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
     }
 
-    // If markers layer exists, remove it
     if (markersLayer) {
         markersLayer.clearLayers();
     }
 
-    // Create a new layer group for current markers
     markersLayer = L.layerGroup().addTo(map);
 
     if (validImages.length === 0) {
@@ -56,12 +53,10 @@ async function initMap(images) {
         return;
     }
 
-    // Fit map to markers
     map.fitBounds(L.latLngBounds(validImages.map(img => [img.latitude, img.longitude])), {
         padding: [20, 20],
     });
 
-    // Add markers
     validImages.forEach(image => {
         const thumbnailIcon = L.divIcon({
             html: `<div class="thumbnail-marker" style="background-image: url('${image.thumbnail_url}')"></div>`,
@@ -145,12 +140,42 @@ async function updateGallery() {
             uploadedAt.className = 'mb-0';
             uploadedAt.innerHTML = `<strong>Uploaded:</strong> ${image.uploaded_at}`;
 
-            contentDiv.appendChild(filename);
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-danger btn-sm mt-2';
+            deleteBtn.textContent = 'X';
+            deleteBtn.onclick = async () => {
+                if (confirm('Are you sure you want to delete this image?')) {
+                    const response = await fetch(`${APP_ROOT}/delete-photo.php`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: image.id })
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('Delete result:', result); // <--- Add this line
+                        if (result.galleryDeleted) {
+                            window.location.href = `${APP_ROOT}/index.php`;
+                        } else {
+                            updateGallery();
+                        }
+                    } else {
+                        alert('Failed to delete image.');
+                    }
+                }
+            };
+            
+            const insideDiv = document.createElement('div');
+            insideDiv.className = 'd-flex justify-content-between align-items-center';
+            insideDiv.style.marginBottom = '10px';
+            insideDiv.appendChild(filename);
+            insideDiv.appendChild(deleteBtn);
+            
+            contentDiv.appendChild(insideDiv);
             contentDiv.appendChild(coordinates);
             contentDiv.appendChild(takenAt);
             contentDiv.appendChild(deviceInfo);
             contentDiv.appendChild(uploadedAt);
-
+          
             listItem.appendChild(img);
             listItem.appendChild(contentDiv);
 
