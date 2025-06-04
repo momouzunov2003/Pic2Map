@@ -57,9 +57,9 @@ if (!galleryExists($_GET['slug'])) {
                         <div class="h-100 w-100" id="map2"></div>    
                     </div>
                     <div class="col overflow-auto">
-                        <div class="d-flex flex-row justify-content-between">
+                        <div class="d-flex flex-row justify-content-between align-items-center">
                             <h2 class="text-center">Uploaded images</h2>
-                            <label for="photoInput" class="btn btn-primary m-2">Upload photos</label>
+                            <label for="photoInput" class="btn btn-primary m-2">Upload</label>
                             <input type="file" id="photoInput" accept="image/jpeg, image/png, image/webp, image/tiff" multiple hidden>
                         </div>
                         <div class="gallery-container">
