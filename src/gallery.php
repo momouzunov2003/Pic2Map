@@ -12,6 +12,14 @@ function createGallery(): string {
     return $slug;
 }
 
+function galleryExists(string $slug): bool {
+    $stmt = dbQuery("SELECT COUNT(*) FROM galleries WHERE slug = :slug", [
+        ':slug' => $slug
+    ]);
+    $count = $stmt->fetchColumn();
+    return $count > 0;
+}
+
 function getGallery(string $slug): ?array {
     $stmt = dbQuery("SELECT id FROM galleries WHERE slug = :slug", [
         ':slug' => $slug
