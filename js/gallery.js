@@ -22,6 +22,7 @@ async function fetchImages() {
     return data.map(image => ({
         id: image.id,
         url: image.url,
+        filename: image.url.split('/').pop().split('-').pop(),
         thumbnail_url: image.thumbnail_url,
         latitude: image.latitude || null,
         longitude: image.longitude || null,
@@ -67,7 +68,7 @@ async function initMap(images) {
         const marker = L.marker([image.latitude, image.longitude], { icon: thumbnailIcon }).addTo(markersLayer);
 
         marker.bindPopup(`
-            <strong><a href=${image.url}>Link</a></strong><br>
+            <strong><a href=${image.url}>${image.filename}</a></strong><br>
             <small>Device Brand: ${image.device_maker}</small><br>
             <small>Device Model: ${image.device_model}</small><br>
             <small>Taken at: ${image.taken_at || 'Unknown'}</small><br>
@@ -100,6 +101,7 @@ async function updateGallery() {
         galleryList.innerHTML = '';
 
         images.forEach(image => {
+            console.log(image.filename);
             const listItem = document.createElement('li');
             listItem.className = 'list-group-item d-flex gap-3 align-items-start m-1';
 
@@ -120,10 +122,12 @@ async function updateGallery() {
 
             const contentDiv = document.createElement('div');
             contentDiv.className = 'd-flex flex-column gap-1';
+            contentDiv.style.maxWidth = 'calc(100% - 120px)';
 
             const filename = document.createElement('h5');
-            filename.className = 'mb-0';
-            filename.textContent = `ID: ${image.id}`;
+            filename.className = 'mb-0 text-truncate w-100';
+            filename.textContent = image.filename;
+            filename.title = image.filename;
 
             const coordinates = document.createElement('p');
             coordinates.className = 'mb-0';
@@ -166,7 +170,7 @@ async function updateGallery() {
             };
             
             const insideDiv = document.createElement('div');
-            insideDiv.className = 'd-flex justify-content-between align-items-center mb-4';
+            insideDiv.className = 'd-flex justify-content-between align-items-center gap-1 mb-2';
             insideDiv.appendChild(filename);
             insideDiv.appendChild(deleteBtn);
             
