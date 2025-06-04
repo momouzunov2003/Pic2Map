@@ -101,13 +101,13 @@ async function updateGallery() {
 
         images.forEach(image => {
             const listItem = document.createElement('li');
-            listItem.className = 'list-group-item d-flex align-items-start';
+            listItem.className = 'list-group-item d-flex gap-3 align-items-start m-1';
 
             const img = document.createElement('img');
             img.id = `image-${image.id}`;
             img.src = image.thumbnail_url;
             img.alt = 'Thumbnail';
-            img.className = 'thumbnail me-3';
+            img.className = 'thumbnail';
             img.onclick = () => {
                 const link = document.createElement('a');
                 link.href = image.url;
@@ -119,21 +119,22 @@ async function updateGallery() {
             img.style.cursor = 'pointer';
 
             const contentDiv = document.createElement('div');
+            contentDiv.className = 'd-flex flex-column gap-1';
 
             const filename = document.createElement('h5');
-            filename.className = 'mb-1';
+            filename.className = 'mb-0';
             filename.textContent = `ID: ${image.id}`;
 
             const coordinates = document.createElement('p');
-            coordinates.className = 'mb-1';
+            coordinates.className = 'mb-0';
             coordinates.innerHTML = `<strong>Coordinates:</strong> ${image.latitude || 'N/A'} lat, ${image.longitude || 'N/A'} lon`;
 
             const takenAt = document.createElement('p');
-            takenAt.className = 'mb-1';
+            takenAt.className = 'mb-0';
             takenAt.innerHTML = `<strong>Taken:</strong> ${image.taken_at}`;
 
             const deviceInfo = document.createElement('p');
-            deviceInfo.className = 'mb-1';
+            deviceInfo.className = 'mb-0';
             deviceInfo.innerHTML = `<strong>Device:</strong> ${image.device_maker} ${image.device_model}`;
 
             const uploadedAt = document.createElement('p');
@@ -141,7 +142,7 @@ async function updateGallery() {
             uploadedAt.innerHTML = `<strong>Uploaded:</strong> ${image.uploaded_at}`;
 
             const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'btn btn-danger btn-sm mt-2';
+            deleteBtn.className = 'btn btn-danger btn-sm';
             deleteBtn.textContent = 'X';
             deleteBtn.onclick = async () => {
                 if (confirm('Are you sure you want to delete this image?')) {
@@ -165,8 +166,7 @@ async function updateGallery() {
             };
             
             const insideDiv = document.createElement('div');
-            insideDiv.className = 'd-flex justify-content-between align-items-center';
-            insideDiv.style.marginBottom = '10px';
+            insideDiv.className = 'd-flex justify-content-between align-items-center mb-4';
             insideDiv.appendChild(filename);
             insideDiv.appendChild(deleteBtn);
             
