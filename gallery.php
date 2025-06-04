@@ -62,7 +62,7 @@ if (!galleryExists($_GET['slug'])) {
                             <label for="photoInput" class="btn btn-primary m-2">Upload</label>
                             <input type="file" id="photoInput" accept="image/jpeg, image/png, image/webp, image/tiff" multiple hidden>
                         </div>
-                        <div class="gallery-container">
+                        <div class="gallery-container overflow-auto">
                             <ul class="gallery-list list-group" id="gallery-list">
                                 <!-- Gallery items will be dynamically inserted here -->
                             </ul>
