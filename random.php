@@ -6,7 +6,7 @@ define('APP_ROOT', '/pic2map');
 $stmt = dbQuery("SELECT slug FROM galleries ORDER BY RANDOM() LIMIT 1");
 $gallery = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$gallery) {
-    header('Redirect: /');
+    header('Location: ' . APP_ROOT);
 }
 else {
     $slug = $gallery['slug'];
