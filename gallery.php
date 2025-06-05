@@ -58,8 +58,9 @@ if (!isset($_GET['slug']) || !galleryExists($_GET['slug'])) {
                     <div class="col overflow-auto">
                         <div class="d-flex flex-row justify-content-between align-items-center">
                             <h2 class="text-center">Uploaded images</h2>
-                            <label for="photoInput" class="btn btn-primary m-2">Upload</label>
+                            <label for="photoInput" class="btn btn-primary m-2">Upload Photos</label>
                             <input type="file" id="photoInput" accept="image/jpeg, image/png, image/webp, image/tiff" multiple hidden>
+                            <button id="downloadGalleryBtn" class="btn btn-success m-2">Download Gallery</button>
                         </div>
                         <div class="gallery-container overflow-auto">
                             <ul class="gallery-list list-group" id="gallery-list">

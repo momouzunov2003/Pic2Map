@@ -157,10 +157,11 @@ async function updateGallery() {
                     });
                     if (response.ok) {
                         const result = await response.json();
-                        console.log('Delete result:', result); // <--- Add this line
+                        console.log('Delete result:', result)
                         if (result.galleryDeleted) {
-                            window.location.href = `${APP_ROOT}/index.php`;
+                            window.location.href = `${APP_ROOT}/index.php?toast=gallery_deleted`;
                         } else {
+                            showToast("Image deleted successfully.", 'success');
                             updateGallery();
                         }
                     } else {
@@ -192,5 +193,33 @@ async function updateGallery() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     updateGallery();
+});
+
+function downloadGallery() {
+    const btn = document.getElementById('downloadGalleryBtn');
+    if (btn) {
+        btn.addEventListener('click', async function() {
+            const slug = window.location.pathname.split('/').pop();
+            const url = `${APP_ROOT}/download-gallery.php?slug=${slug}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Download failed');
+                const blob = await response.blob();
+                const a = document.createElement('a');
+                a.href = window.URL.createObjectURL(blob);
+                a.download = `gallery_${slug}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                showToast('Gallery downloaded successfully.', 'success');
+            } catch (e) {
+                showToast('Failed to download gallery.', 'danger');
+            }
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    downloadGallery();
 });
 
