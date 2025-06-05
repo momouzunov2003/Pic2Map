@@ -1,5 +1,10 @@
 RewriteEngine On
 
+# Rewrite /gallery/slug to gallery.php?slug=slug
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^gallery/([^/]+)/?$ gallery.php?slug=$1 [L,QSA]
+
 # Skip if the request already ends in .php
 RewriteCond %{REQUEST_URI} !\.php$
 
@@ -7,11 +12,6 @@ RewriteCond %{REQUEST_URI} !\.php$
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)$ $1.php [L]
-
-# Rewrite /gallery/slug to gallery.php?slug=slug
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^gallery/([^/]+)/?$ gallery.php?slug=$1 [L,QSA]
 
 ErrorDocument 404 /404.php
 
