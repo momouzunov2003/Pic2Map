@@ -39,8 +39,6 @@ function getGallery(string $slug): ?array {
 }
  
 function deletePhoto(): void {
-    header('Content-Type: application/json');
-
     $data = json_decode(file_get_contents('php://input'), true);
 
     if (!isset($data['id'])) {
@@ -97,39 +95,36 @@ function deletePhoto(): void {
 }
 
 function downloadGallery(string $slug): void {
+    $images = getGallery($slug);
 
+    $tmpFile = sys_get_temp_dir() . '/gallery_' . uniqid() . '.zip';
+    $zip = new ZipArchive();
 
-$slug = $_GET['slug'];
-$images = getGallery($slug);
-
-$tmpFile = sys_get_temp_dir() . '/gallery_' . uniqid() . '.zip';
-$zip = new ZipArchive();
-
-if ($zip->open($tmpFile, ZipArchive::CREATE) !== TRUE) {
-    exit("Cannot open <$tmpFile>\n");
-}
-
-foreach ($images as $img) {
-    $filePath = dirname(dirname(__DIR__ )) . parse_url($img['url'], PHP_URL_PATH);
-    
-    if (file_exists($filePath)) {
-        $zip->addFile($filePath, basename($filePath));
-    } else {
-        error_log("Missing image file: $filePath");
+    if ($zip->open($tmpFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+        exit("Cannot open <$tmpFile>\n");
     }
-}
 
-if (!$zip->close()) {
-    exit("Failed to finalize ZIP file");
-}
+    foreach ($images as $img) {
+        $filePath = dirname(dirname(__DIR__ )) . parse_url($img['url'], PHP_URL_PATH);
+        
+        if (file_exists($filePath)) {
+            $zip->addFile($filePath, basename($filePath));
+        } else {
+            error_log("Missing image file: $filePath");
+        }
+    }
 
-clearstatcache();
+    if (!$zip->close()) {
+        exit("Failed to finalize ZIP file");
+    }
 
-header('Content-Type: application/zip');
-header('Content-Disposition: attachment; filename="gallery_' . $slug . '.zip"');
-header('Content-Length: ' . filesize($tmpFile));
+    clearstatcache();
 
-readfile($tmpFile);
-unlink($tmpFile);
+    header('Content-Type: application/zip');
+    header('Content-Disposition: attachment; filename="gallery_' . $slug . '.zip"');
+    header('Content-Length: ' . filesize($tmpFile));
+
+    readfile($tmpFile);
+    unlink($tmpFile);
 }
 ?>
