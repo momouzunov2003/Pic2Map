@@ -58,9 +58,8 @@
     <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= APP_ROOT ?>/js/toast.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="<?= APP_ROOT ?>/js/scripts.js"></script>
+    <script src="<?= APP_ROOT ?>/js/toast.js"></script>
     
     <script>
         const map = L.map('map').setView([0, 0], 2);

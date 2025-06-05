@@ -4,11 +4,6 @@ define('APP_ROOT', '/pic2map');
 
 require_once __DIR__ . '/src/gallery.php';
 
-// show errors, nginx
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
 if (!isset($_GET['slug']) || !galleryExists($_GET['slug'])) {
     http_response_code(404);
     header('Location: ' . APP_ROOT . '/404');
