@@ -8,7 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $to      = 'webtestmail@mail.bg';
         $subject = "Contact Form Submission from $name";
         $body    = "Name: $name\nEmail: $email\n\nMessage:\n$message";
-        $headers = "From: $email\r\nReply-To: $email\r\n";
+        $headers =
+            "From: hello@mailersend.com" .
+            "\r\n" .
+            "Reply-To: reply@mailersend.com" .
+            "\r\n" .
+            mail($to, $subject, $message, $headers);
 
         if (mail($to, $subject, $body, $headers)) {
             header('Location: /pic2map/contacts.php?sent=1');
@@ -22,5 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
+
 header('Location: /pic2map/contacts.php');
 exit;
+?>
