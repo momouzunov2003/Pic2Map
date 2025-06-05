@@ -8,12 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $to      = 'webtestmail@mail.bg';
         $subject = "Contact Form Submission from $name";
         $body    = "Name: $name\nEmail: $email\n\nMessage:\n$message";
-        $headers =
-            "From: hello@mailersend.com" .
-            "\r\n" .
-            "Reply-To: reply@mailersend.com" .
-            "\r\n" .
-            mail($to, $subject, $message, $headers);
+        $headers = 'From: you@example.com' . "\r\n" .
+                'Reply-To: you@example.com' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
 
         if (mail($to, $subject, $body, $headers)) {
             header('Location: /pic2map/contacts.php?sent=1');
