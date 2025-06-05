@@ -9,8 +9,7 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-
-if (!galleryExists($_GET['slug'])) {
+if (!isset($_GET['slug']) || !galleryExists($_GET['slug'])) {
     http_response_code(404);
     header('Location: ' . APP_ROOT . '/404');
     exit;
