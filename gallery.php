@@ -1,7 +1,6 @@
 <!DOCTYPE  html>
 <?php
-define('APP_ROOT', '/pic2map');
-
+require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/src/gallery.php';
 
 if (!isset($_GET['slug']) || !galleryExists($_GET['slug'])) {

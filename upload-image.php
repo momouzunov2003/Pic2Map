@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/src/db.php';
-
-define ('MAX_FILE_SIZE', 15 * 1024 * 1024); // 15MB
-
-$allowed_types = ['image/jpeg', 'image/png', 'image/tiff', 'image/webp'];
+require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json');
 

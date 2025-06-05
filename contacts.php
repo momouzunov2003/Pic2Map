@@ -1,5 +1,5 @@
 <!DOCTYPE  html>
-<?php define('APP_ROOT', '/pic2map'); ?>
+<?php require_once __DIR__ . '/config.php'; ?>
 <html lang="en">    
     <head>
 		<meta charset="UTF-8">
