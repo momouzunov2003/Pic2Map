@@ -37,7 +37,7 @@
                     <h1 class="text-center mt-5">Contact Us</h1>
                     <p class="text-center">We would love to hear from you! Please reach out with any questions or feedback.</p>
 
-                    <form action="/submit-contact" method="POST" class="p-4 w-100" style="max-width: 600px; margin: 0 auto;">
+                    <form action="<?=APP_ROOT ?>/src/contacts.php" method="POST" class="p-4 w-100" style="max-width: 600px; margin: 0 auto;">
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" name="name" required>
