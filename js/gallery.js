@@ -21,9 +21,9 @@ async function fetchImages() {
     }
     return data.map(image => ({
         id: image.id,
-        url: image.url,
         filename: image.url.split('/').pop().split('-').pop(),
-        thumbnail_url: image.thumbnail_url,
+        url: encodeURI(image.url),
+        thumbnail_url: encodeURI(image.thumbnail_url),
         latitude: image.latitude || null,
         longitude: image.longitude || null,
         device_maker: image.device_maker || 'Unknown',
@@ -101,7 +101,6 @@ async function updateGallery() {
         galleryList.innerHTML = '';
 
         images.forEach(image => {
-            console.log(image.filename);
             const listItem = document.createElement('li');
             listItem.className = 'list-group-item d-flex gap-3 align-items-start m-1';
 
@@ -113,7 +112,7 @@ async function updateGallery() {
             img.onclick = () => {
                 const link = document.createElement('a');
                 link.href = image.url;
-                link.download = `image-${image.id}.jpg`;
+                link.download = image.filename;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -129,9 +128,13 @@ async function updateGallery() {
             filename.textContent = image.filename;
             filename.title = image.filename;
 
+
+            const latitude = image.latitude ? image.latitude.toFixed(6) : 'N/A';
+            const longitude = image.longitude ? image.longitude.toFixed(6) : 'N/A';
+
             const coordinates = document.createElement('p');
             coordinates.className = 'mb-0';
-            coordinates.innerHTML = `<strong>Coordinates:</strong> ${image.latitude || 'N/A'} lat, ${image.longitude || 'N/A'} lon`;
+            coordinates.innerHTML = `<strong>Coordinates:</strong> ${latitude || 'N/A'} lat, ${longitude || 'N/A'} lon`;
 
             const takenAt = document.createElement('p');
             takenAt.className = 'mb-0';
