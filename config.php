@@ -5,5 +5,7 @@ define('APP_ROOT', '/pic2map');
 define ('MAX_FILE_SIZE', 15 * 1024 * 1024); // 15MB
 // The type of images allowed for upload
 $allowed_types = ['image/jpeg', 'image/png', 'image/tiff', 'image/webp'];
+// Email addresses of the administrators to receive contact form submissions
+define('ADMIN_EMAILS', 'georgi.iliev533@outlook.com, uzunovvv03@gmail.com')
 
 ?>

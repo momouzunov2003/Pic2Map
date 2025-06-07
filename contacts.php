@@ -63,9 +63,12 @@
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="<?= APP_ROOT ?>/js/toast.js"></script>
+
     <script>
         const map = L.map('map').setView([0, 0], 2);
 
@@ -87,6 +90,22 @@
             );
         } else {
             console.warn("Geolocation not supported by this browser.");
+        }
+
+        const queryParams = new URLSearchParams(window.location.search);
+        if (queryParams.has("sent")) {
+            const value = queryParams.get("sent");
+            window.history.replaceState({}, document.title, window.location.pathname);
+            if (value == 1) {
+                showToast("Your message has been sent successfully.", "success");
+            } else if (value == 2) {
+                showToast("There was an error sending your message. Please try again later.", "danger");
+            } else if (value == 3) {
+                showToast("Please fill in all fields.", "warning");
+            } else {
+                showToast("An unknown error occurred.", "danger");
+            }
+
         }
     </script>
 </body>
