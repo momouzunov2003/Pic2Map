@@ -91,6 +91,10 @@
                 showToast('Gallery deleted successfully.', 'success');
     
                 window.history.replaceState({}, document.title, window.location.pathname);
+            } else if (params.get('toast') === 'nogalleries') {
+                showToast('No galleries to show.', 'warning');
+    
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
         });
     </script>
