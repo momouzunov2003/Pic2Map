@@ -66,6 +66,7 @@ function createWebPThumbnail(string $sourcePath, string $destinationPath, int $t
 
         $image = new Imagick();
         $image->readImage($sourcePath . '[0]');
+        $image->autoOrient();
         $image->setImageFormat('webp');
         $image->thumbnailImage($thumbWidth, 0);
 
