@@ -8,9 +8,12 @@ $allowed_types = ['image/jpeg', 'image/png', 'image/tiff', 'image/webp'];
 // Email addresses of the administrators to receive contact form submissions
 define('ADMIN_EMAILS', 'georgi.iliev533@outlook.com, uzunovvv03@gmail.com');
 
+define('DB_TYPE', 'mysql');
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'pic2map');
 define('DB_USER', 'root');
 define('DB_PASS', 'root');
+define('DB_USER', 'pic2map');
+define('DB_PASS', 'parola');
 
 ?>
