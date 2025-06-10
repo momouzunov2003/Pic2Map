@@ -17,14 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         if (mail($to, $subject, $body, $headers)) {
-            header('Location: /pic2map/contacts.php?sent=1');
+            header('Location: ' . APP_ROOT . '/pic2map/contacts.php?sent=1');
             exit;
         } else {
-            header('Location: /pic2map/contacts.php?sent=2');
+            header('Location: ' . APP_ROOT . '/pic2map/contacts.php?sent=2');
             exit;
         }
     } else {
-        header('Location: /pic2map/contacts.php?sent=3');
+        header('Location: ' . APP_ROOT . '/pic2map/contacts.php?sent=3');
         exit;
     }
 }
